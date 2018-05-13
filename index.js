@@ -1,5 +1,7 @@
 const express = require('express');
 
+const authRoutes = require('./routes/authRoutes');
+
 const app = express();
 
 app.get('/', (req, res) => {
@@ -8,4 +10,6 @@ app.get('/', (req, res) => {
   });
 });
 
-app.listen(process.env.PORT || 8080);
+app.use('/auth', authRoutes);
+
+app.listen(process.env.PORT || 5000);
