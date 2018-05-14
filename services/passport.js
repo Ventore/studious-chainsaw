@@ -7,6 +7,19 @@ const {
   auth: { google },
 } = require('../config');
 
+// INFO: Used for cookies setup, remove if JWT
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser((id, done) => {
+  User.findById(id)
+    .then(user => {
+      done(null, user);
+    })
+    .catch(err => done(err, false));
+});
+
 passport.use(
   new GoogleStrategy(
     {
@@ -18,11 +31,15 @@ passport.use(
       User.findOne({ googleID: profile.id })
         .then(user => {
           if (user) {
+            done(null, user);
           } else {
-            new User({ googleID: profile.id }).save();
+            new User({ googleID: profile.id })
+              .save()
+              .then(user => done(null, user))
+              .catch(err => done(err, false));
           }
         })
-        .catch(err => console.log(err));
+        .catch(err => done(err, false));
     }
   )
 );
