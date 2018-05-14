@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const cookieSession = require('cookie-session');
 const authRoutes = require('./routes/authRoutes');
 
+const authenticationService = require('./services/passport');
+
 const {
   databases: { mongoURL },
   cookie: { key },
@@ -18,6 +20,8 @@ app.use(
     keys: [key],
   })
 );
+app.use(authenticationService.initialize());
+app.use(authenticationService.session());
 
 app.get('/', (req, res) => {
   res.send({

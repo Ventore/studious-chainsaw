@@ -8,4 +8,8 @@ router.get(
   })
 );
 
+router.get('logout', (req, res) => {
+  req.logout();
+});
+
 module.exports = router;
